@@ -1,0 +1,27 @@
+name: Work order
+description: A bounded outcome for a human or agent
+title: "[Work] "
+labels: [intake]
+projects: [patchwerks/1]
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome
+      description: What observable result is needed, and which repository owns it?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance evidence
+      description: Name the actual checks, data sources, interfaces and artifacts that prove completion.
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Dependencies and authority boundaries
+      description: Link blockers, PLAN/WP and non-goals. Issue text does not authorize privileged or physical operations.
+    validations:
+      required: true

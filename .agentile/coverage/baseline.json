@@ -1,0 +1,17 @@
+{
+  "project": "patchWERKS coordination",
+  "day_zero_date": "2026-10-25",
+  "tests": {
+    "count": 1,
+    "command": "set -o pipefail; python3 -m unittest discover -s tests -q 2>&1 | awk '/^Ran [0-9]+ tests? in / {count=$2} END {if(count == \"\") exit 1; print count}'"
+  },
+  "specs": {
+    "count": 0,
+    "command": "",
+    "intentional_empty": "Configuration-only bootstrap; no production state machine or TLC qualification is claimed."
+  },
+  "tripwires": {
+    "count": 4
+  },
+  "frontmatter": {"covered": 29, "total": 29}
+}

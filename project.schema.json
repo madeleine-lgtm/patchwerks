@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "owner": "patchwerks",
+  "number": 1,
+  "visibility": "private",
+  "title": "patchWERKS delivery",
+  "fields": {
+    "Status": ["Backlog", "Ready", "In progress", "Review", "Blocked", "Done"],
+    "Area": ["Furb-o-Mek", "semanticore", "Shared"],
+    "Risk": ["Routine", "Untrusted code", "Privileged", "Physical"],
+    "Harness/session": "TEXT"
+  },
+  "views": {
+    "Furb-o-Mek": "is:issue area:\"Furb-o-Mek\"",
+    "semanticore": "is:issue area:semanticore",
+    "Shared": "is:issue area:Shared"
+  },
+  "runtime_ids": "Discover Project, field, option and item IDs through the API and keep mutable runtime bindings in operator-private adapter configuration."
+}
