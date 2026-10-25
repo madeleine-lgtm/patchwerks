@@ -2,6 +2,10 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+if [[ -n "${AGENTILE_BASELINE_REF:-}" ]]; then
+  bash scripts/check-audit-diff.sh . "$AGENTILE_BASELINE_REF"
+fi
+
 jq -e '
   .schema_version == 1 and
   (.repositories | length > 0) and

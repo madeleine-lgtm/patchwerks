@@ -2,8 +2,8 @@
   "project": "patchWERKS coordination",
   "day_zero_date": "2026-10-25",
   "tests": {
-    "count": 1,
-    "command": "set -o pipefail; python3 -m unittest discover -s tests -q 2>&1 | awk '/^Ran [0-9]+ tests? in / {count=$2} END {if(count == \"\") exit 1; print count}'"
+    "count": 5,
+    "command": "set -euo pipefail; audit_count=\"$(bash tests/audit_immutability.sh)\"; python3 -m unittest discover -s tests -q 2>&1 | awk -v extra=\"$audit_count\" '/^Ran [0-9]+ tests? in / {count=$2} END {if(count == \"\") exit 1; print count + extra}'"
   },
   "specs": {
     "count": 0,

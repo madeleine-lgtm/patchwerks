@@ -2,16 +2,15 @@
 
 This directory packages the Agentile methodology's workflow commands as
 [Agent Skills](https://agentskills.io/specification) in the cross-harness
-`.agents/skills/` convention. Any agentskills.io-compliant harness (Devin,
-Claude Code, Cursor, Codex, Cognition, Windsurf, Copilot, OpenCode) discovers
-these skills automatically — no per-harness configuration required.
+`.agents/skills/` convention. Harnesses implementing this convention may discover
+these skills. Other harness adapters must explicitly load the root AGENTS.md and
+Agentile entrypoint; this repository does not claim automatic discovery by every engine.
 
 ## Why this exists
 
-The Agentile methodology ships Claude Code slash commands under
-[`.claude/commands/`](../.claude/commands/) (`/sprint`, `/journal`,
-`/audit-drive`, etc.). Those are Claude-specific. Non-Claude harnesses cannot
-invoke them. The skills in this directory are the **harness-agnostic** equivalent:
+Upstream Agentile offers optional Claude Code slash commands (`/sprint`, `/journal`,
+`/audit-drive`, etc.); those bindings are not installed in this adoption.
+The skills in this directory are the **harness-agnostic** equivalent:
 the same workflows, expressed as `SKILL.md` files that every compliant harness
 can load.
 
@@ -19,20 +18,19 @@ can load.
 
 | Skill | Replaces (Claude command) | What it does |
 |-------|---------------------------|--------------|
-| [`audit-drive`](audit-drive/SKILL.md) | `/audit-drive` | Author an audit, open a remediation sprint, or close findings |
-| [`sprint`](sprint/SKILL.md) | `/sprint` | Sprint lifecycle: kickoff, daily, close, status, index |
-| [`journal`](journal/SKILL.md) | `/journal` | Seed a Rule-12-frontmatter journal entry |
-| [`case-study`](case-study/SKILL.md) | `/case-study` | Seed a case study (anchor incident + generalizable lesson + enforcement surface) |
-| [`essay`](essay/SKILL.md) | `/essay` | Seed a historical-context essay (not governance) |
-| [`claim-grade`](claim-grade/SKILL.md) | `/claim-grade` | Run the AI claim grader on a commit/PR/sprint section |
-| [`ratchet-check`](ratchet-check/SKILL.md) | `/ratchet-check` | Run the four ratchet checks (tests, specs, tripwires, frontmatter) |
+| [`audit-drive`](skills/audit-drive/SKILL.md) | `/audit-drive` | Author an audit, open a remediation sprint, or close findings |
+| [`sprint`](skills/sprint/SKILL.md) | `/sprint` | Sprint lifecycle: kickoff, daily, close, status, index |
+| [`journal`](skills/journal/SKILL.md) | `/journal` | Seed a Rule-12-frontmatter journal entry |
+| [`case-study`](skills/case-study/SKILL.md) | `/case-study` | Seed a case study (anchor incident + generalizable lesson + enforcement surface) |
+| [`essay`](skills/essay/SKILL.md) | `/essay` | Seed a historical-context essay (not governance) |
+| [`ratchet-check`](skills/ratchet-check/SKILL.md) | `/ratchet-check` | Run the four ratchet checks (tests, specs, tripwires, frontmatter) |
 
 ## Relationship to `.claude/commands/`
 
-The Claude slash commands under `.claude/commands/` are **not modified** by this
-addition. They remain the Claude-specific invocation surface. The `.agents/skills/`
-files are the harness-agnostic equivalent; the workflow content is adapted from
-the commands but lives independently so non-Claude harnesses can use it.
+The `.agents/skills/` files are the harness-agnostic invocation surface in this
+adoption. Optional model-backed claim grading is intentionally excluded until its
+provider access, budget and evidence semantics are configured; an unavailable grader
+must never count as a successful review.
 
 If a future sprint wants to deduplicate, the `.claude/commands/*.md` files could
 be regenerated from the `SKILL.md` files (or vice versa). That is out of scope
@@ -46,7 +44,7 @@ only when the skill is activated. This keeps session-start cost minimal.
 
 ## See also
 
-- [`../AGENTILE.md`](../AGENTILE.md) — the methodology overview (in repos bootstrapped from this skeleton).
+- [`../AGENTS.md`](../AGENTS.md) — project operating instructions.
 - [`../.agentile/rules/CORE_RULES.md`](../.agentile/rules/CORE_RULES.md) — the 13 non-negotiable rules.
 - [`../.agentile/AGENT_ENTRY.md`](../.agentile/AGENT_ENTRY.md) — the agent entry point.
 - [Sprint file](https://github.com/CitrateNetwork/citrate-federation/blob/main/agentile/sprints/active/2026-08-11-agent-agnostic-skills-and-agents-md.md) — AGNOSTIC-01 (the work package that created this directory).
