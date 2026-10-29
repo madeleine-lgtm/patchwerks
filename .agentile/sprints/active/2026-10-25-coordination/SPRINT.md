@@ -26,3 +26,11 @@ No new distributed scheduler, credential broker, execution daemon or state machi
 ## Evidence and remaining work
 
 Append exact revisions and observed results during closeout. Product adapters, independent review identities and privileged/live execution are separate tracked work, not implied by this bootstrap.
+
+## Changelog
+
+- 2026-10-30: Prepared the PW-0.4 [issue 4](https://github.com/patchwerks/patchwerks/issues/4)
+  offline [task-adapter conformance suite](../../../../docs/task-adapter-conformance.md).
+  Tests model synthetic projection/reconciliation obligations only; no owner-native
+  binding, privileged synchronization, persistence or concurrency qualification is
+  delivered. Canonical acceptance and live task state remain on issue 4.
