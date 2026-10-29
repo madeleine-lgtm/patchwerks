@@ -26,3 +26,11 @@ No new distributed scheduler, credential broker, execution daemon or state machi
 ## Evidence and remaining work
 
 Append exact revisions and observed results during closeout. Product adapters, independent review identities and privileged/live execution are separate tracked work, not implied by this bootstrap.
+
+## Changelog
+
+- 2026-10-29: PW-0.2 / [issue #5](https://github.com/patchwerks/patchwerks/issues/5)
+  local follow-up adds hostile-input fixtures for the accepted audit helper and
+  a minimal commit-object validation fix. See the [bounded evidence report](../../../../docs/hostile-audit-fixtures.md).
+  Candidate only: upstream publication, independent acceptance and complete
+  contribution/promotion isolation remain pending; no workflow activation occurs.
