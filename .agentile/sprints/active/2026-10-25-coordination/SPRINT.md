@@ -34,3 +34,15 @@ Append exact revisions and observed results during closeout. Product adapters, i
   a minimal commit-object validation fix. See the [bounded evidence report](../../../../docs/hostile-audit-fixtures.md).
   Candidate only: upstream publication, independent acceptance and complete
   contribution/promotion isolation remain pending; no workflow activation occurs.
+- 2026-10-30: PW-0.2 / issue #5 continuation adds rename and symlink regression
+  cases. Accepted-helper comparison reproduced the two object-type failures;
+  candidate verification passed 15 tests. No state-machine or product CLI change
+  is introduced, so TLA+ and Gherkin are not applicable to this build-infrastructure
+  slice. See the same bounded evidence report for worker limits and the current
+  read-only publication blocker. This session holds no live resources; its local
+  continuation is handed off for publication and independent review.
+- 2026-10-30: Further PW-0.2 / issue #5 adversarial work reproduced two local
+  replacement-reference bypasses. Object admission and diff now ignore those
+  replacements; three new regressions bring the canonical gate to 18 tests.
+  The evidence report distinguishes local-metadata control from ordinary PR
+  content and retains the broader CI/promotion acceptance limits.

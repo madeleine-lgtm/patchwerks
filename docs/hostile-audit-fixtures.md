@@ -1,6 +1,6 @@
 ---
 created: 2026-10-29T19:07:42Z
-branch: codex/5-hostile-helper-tests
+branch: codex/5-hostile-audit-review
 author: Codex
 sprint: PW-0
 status: active
@@ -37,7 +37,7 @@ from a valid commit ID: the caller must still supply the correct trusted revisio
 
 Accepted helper SHA-256:
 `5c8e981ecefae239bad93e6f203575eb5374ecb39223d53ef6176452d1297abc`.
-Candidate helper SHA-256:
+Initial type-check candidate helper SHA-256 (superseded below):
 `a5cd7744509f62b8ada47dc92d50db00262768d459e36a3a52893c24690decd6`.
 
 Observed locally: the eight new tests against the accepted helper produced six
@@ -83,8 +83,78 @@ checker replacement, credential isolation and promotion remain unqualified and
 unchanged by this patch. A green helper suite cannot accept issue #5, bootstrap
 policy, an artifact receipt or a live deployment. No privileged runtime is added.
 
-This candidate is a local branch/patch because the available repository identity
+At the initial local checkpoint, this candidate was a branch/patch because the available repository identity
 has read-only upstream access. Independent review and authorized publication are
 separate gates. No permission expansion, upstream write, merge, fork or activation
 is performed. Rollback removes the tests/report and reverts the small type check;
 doing so restores the demonstrated tree/tag acceptance defect.
+
+## Revalidation on 2026-10-30
+
+The remote default branch still resolves to the accepted `b99937e` revision above.
+This continuation preserves the existing six-line helper fix and adds two real
+Git regressions: a rename with shell syntax/newline in its destination, and an
+audit replaced by a symlink whose target contains the original text. Both reject
+with `BLOCKER`; neither is accepted as a new correction.
+
+The expanded ten-case hostile suite against the accepted helper produced eight
+passes and the same two failures (tree and annotated-tag objects returned zero).
+The candidate passed the canonical `scripts/verify.sh` with 15 total tests
+(11 Python tests and four shell cases), four tripwires and 29/29 frontmatter.
+The empty formal/production corpora remain explicitly vacuous. The run used a
+disposable source copy with an empty environment, network and user-home/device
+reads denied, and writes restricted to disposable scratch. Apple's Git launcher
+reported denied xcrun cache writes; commands completed and the full gate exited
+zero. This is local evidence, not Linux CI or independent approval.
+
+At that checkpoint, the GitHub identity reported `pull: true`, `push: false` for
+this public repository, and no upstream PR, board transition or issue closure was
+claimed. The larger issue #5 isolation and promotion gates above remain open.
+
+## Changelog
+
+- 2026-10-30: Reproduced the accepted-helper defect, added rename/symlink cases,
+  ran the expanded canonical gate and rechecked the publication-access blocker.
+
+## Replacement-reference hardening on 2026-10-30
+
+Two further real-Git fixtures reproduced a bypass in the initial type-check
+candidate: a local replacement for the baseline hid an audit modification, and
+a replacement for HEAD hid deletion. Both returned success before the fix.
+This threat requires control of local repository metadata, for example a reused
+checkout after candidate execution; ordinary committed PR files alone do not
+install replacement refs. Fresh trusted checkouts remain necessary.
+
+Both object-type admission and the audit diff now use `git --no-replace-objects`.
+Git's [replacement documentation](https://git-scm.com/docs/git-replace) specifies
+that replacement refs normally affect object reads and that this option disables
+them. A third regression verifies that a tree replaced by a commit is rejected
+at the object-type boundary. Previously that case failed later during diff;
+it was not a third successful bypass.
+
+The final candidate helper SHA-256 is
+`9fdc3d5eb9000f0221cc9b0cd5a7b76e4ad0cc3675382caeba164f8274701f0e`.
+The complete canonical gate passed with 18 tests (14 Python and four shell),
+four tripwires and 29/29 frontmatter. Python 3.14.7 and Apple Git 2.39.5 were
+used in the same empty-environment, network-denied disposable worker; selecting
+the developer-tools Git executable directly removed the earlier launcher cache
+diagnostics. Source was read-only and only fixture scratch was writable. No
+dependency download, live resource or privileged worker credential was used.
+
+This remains a local check of the helper, not enforcement of the whole CI trust
+boundary. HEAD is still supplied by the caller's checkout; a trusted dispatcher
+must pin and revalidate the candidate revision and reject concurrent mutation.
+The helper does not make a malicious Git executable/configuration safe or attest
+an artifact, review, production deployment or distributed claim.
+
+Changelog continuation: 2026-10-30 adds three replacement-reference regressions
+and the two-command hardening; the earlier 13- and 15-test counts are historical.
+
+## Publication path
+
+On 2026-10-30 the operator created the public contribution fork
+[`madeleine-lgtm/patchwerks`](https://github.com/madeleine-lgtm/patchwerks).
+The issue-numbered bookmark `codex/5-hostile-audit-review` is prepared for a draft
+PR to `patchwerks/patchwerks:main` through that fork. This uses ordinary fork
+contribution permissions; upstream write access is unchanged. No maintainer
+approval, merge, board transition or broader issue acceptance is implied.

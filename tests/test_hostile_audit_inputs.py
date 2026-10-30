@@ -105,8 +105,46 @@ class HostileAuditInputs(unittest.TestCase):
             with self.subTest(ref=ref):
                 self.gate(2, ref)
 
+    def test_audit_rename_cannot_disguise_history_deletion(self) -> None:
+        destination = self.audit.with_name("$(touch filename-executed)\nrenamed.md")
+        self.git("mv", "--", str(self.audit), str(destination))
+        self.commit()
+        self.assertIn("BLOCKER", self.gate(1).stderr)
+
+    def test_audit_symlink_cannot_replace_original_record(self) -> None:
+        replacement = self.repo / "replacement.md"
+        replacement.write_text("original audit\n", encoding="utf-8")
+        self.audit.unlink()
+        self.audit.symlink_to("../../replacement.md")
+        self.commit()
+        # The target has identical text: the record's type change must still fail.
+        self.assertIn("BLOCKER", self.gate(1).stderr)
+
     def test_unknown_sha_fails_closed(self) -> None:
         self.gate(2, "1" * 40)
+
+    def test_replaced_baseline_cannot_hide_modified_audit(self) -> None:
+        self.audit.write_text("rewritten history\n", encoding="utf-8")
+        self.commit()
+        candidate = self.git("rev-parse", "HEAD").stdout.strip()
+        self.git("replace", self.baseline, candidate)
+        # The fixture really changes Git's default view of the baseline.
+        self.assertEqual(self.git("diff", "--name-only", self.baseline, "HEAD").stdout, "")
+        self.assertIn("BLOCKER", self.gate(1).stderr)
+
+    def test_replaced_head_cannot_hide_deleted_audit(self) -> None:
+        self.audit.unlink()
+        self.commit()
+        candidate = self.git("rev-parse", "HEAD").stdout.strip()
+        self.git("replace", candidate, self.baseline)
+        self.assertEqual(self.git("diff", "--name-only", self.baseline, "HEAD").stdout, "")
+        self.assertIn("BLOCKER", self.gate(1).stderr)
+
+    def test_replaced_tree_cannot_impersonate_commit_baseline(self) -> None:
+        tree = self.git("rev-parse", "HEAD^{tree}").stdout.strip()
+        self.git("replace", "--force", tree, self.baseline)
+        self.assertEqual(self.git("cat-file", "-t", tree).stdout.strip(), "commit")
+        self.assertIn("trusted baseline must identify a commit object", self.gate(2, tree).stderr)
 
     def test_tree_object_is_not_a_trusted_commit(self) -> None:
         self.gate(2, self.git("rev-parse", "HEAD^{tree}").stdout.strip())
