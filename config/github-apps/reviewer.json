@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "document_type": "proposed-permission-plan",
+  "role": "reviewer",
+  "permissions": {
+    "contents": "read",
+    "pull_requests": "write",
+    "checks": "read",
+    "actions": "read",
+    "metadata": "read"
+  },
+  "registration_authorized": false,
+  "installation_authorized": false
+}
