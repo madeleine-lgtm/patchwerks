@@ -27,7 +27,7 @@ jobs:
           printf '%s  %s\n' fce0271158e665ceb82dc66c5eb95b1728649094e9133074f3b5baece345fc08 \
             "$RUNNER_TEMP/qualification-tools/jj.tar.gz" | sha256sum --check --strict
           tar -xzf "$RUNNER_TEMP/qualification-tools/jj.tar.gz" \
-            -C "$RUNNER_TEMP/qualification-tools" --no-same-owner --no-same-permissions jj
+            -C "$RUNNER_TEMP/qualification-tools" --no-same-owner --no-same-permissions ./jj
           chmod 500 "$RUNNER_TEMP/qualification-tools/jj"
       - name: Qualify local operations without credentials or network
         shell: bash
