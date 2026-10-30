@@ -166,11 +166,35 @@ class RepositoryCase(RepositoryFixture):
         self.assertEqual(calls[-1][0][:3], ["docker", "rm", "--force"])
         self.assertEqual(calls[-1][0][-1], command[command.index("--name") + 1])
 
+    def test_mount_roots_readable_under_restrictive_umask(self):
+        actual = worker.bounded
+        observed = []
+        def fake(command, env, limit, timeout, cwd=None):
+            if command[0] != "docker":
+                return actual(command, env, limit, timeout, cwd)
+            if command[1] == "run":
+                for index, arg in enumerate(command):
+                    if arg == "--mount":
+                        mount_root = Path(command[index + 1].split("src=", 1)[1].split(",dst=", 1)[0])
+                        observed.append(mount_root.name)
+                        self.assertEqual(mount_root.stat().st_mode & 0o777, 0o755)
+                        for path in mount_root.rglob("*"):
+                            if path.is_file():
+                                self.assertEqual(path.stat().st_mode & 0o777, 0o444)
+            return 0, b"", b""
+        previous = os.umask(0o077)
+        try:
+            with patch.object(worker, "bounded", fake):
+                worker.run(self.repo, self.base, self.base)
+        finally:
+            os.umask(previous)
+        self.assertEqual(observed, ["candidate", "trusted"])
+
     def test_cleanup_after_timeout_or_output_limit(self):
         actual = worker.bounded
         for reason in ("timeout", "output-limit"):
             calls = []
-            def fake(command, env, limit, timeout, cwd=None):
+            def fake(command, env, limit, timeout, cwd=None, calls=calls, reason=reason):
                 if command[0] != "docker":
                     return actual(command, env, limit, timeout, cwd)
                 calls.append(command)
@@ -237,6 +261,8 @@ class RealDockerTests(RepositoryFixture):
         self.write("policy/contribution-worker.json", b"{}")
         self.write("mode", b"normal")
         self.head = self.commit()
+        previous_umask = os.umask(0o077)
+        self.addCleanup(os.umask, previous_umask)
 
     def test_real_isolation(self):
         with patch.dict(os.environ, {"TRUSTED_TEST_SECRET": "canary"}):

@@ -75,7 +75,15 @@ The execution controls follow the [Docker container run reference](https://docs.
 
 ## Changelog
 
+- 2026-10-31: Implemented comment-preserving review decisions and umask-independent mount-root permissions with four new regressions; confined gate passed 45 tests with two Docker skips, with new hosted qualification pending.
+
 - 2026-10-30: Recorded successful hosted qualification at PR 10 head `dd1af648ced324be021a04506beee7fbc4f46402`: 23 worker tests including both real-Docker cases and 15 synthetic artifact tests passed; preserved local/default-profile skips and independent/production acceptance limits.
 
 - 2026-10-30: Added portable filesystem-alias rejection and exclusive staging writes, with passing direct Git-object case/Unicode fixtures; clarified trusted local Git metadata prerequisites. The updated confined canonical gate discovered 43 tests: 41 passed and two real-Docker tests skipped.
 - 2026-10-30: Added the bounded worker and advisory artifact qualification contract, mapped acceptance scenarios, and recorded confined local results and separately scoped hosted real-Docker qualification; independent acceptance remains pending.
+
+## Review follow-up — 2026-10-31
+
+Implemented the two bounded PR 10 review corrections: only APPROVED, CHANGES_REQUESTED and DISMISSED replace a reviewer's latest decision; later COMMENTED observations retain their metadata validation without clearing an outstanding decision. Candidate/checker mount roots are explicitly chmod 0755 after creation, independently of the caller's umask. Four new regression tests cover the requested changes-requested/comment sequence, approval preservation, malformed comment metadata and mount permissions under umask 077. Both opt-in actual Docker tests now run with umask 077. The existing latest-decision test now uses consistent readback evidence, and loop callbacks bind their per-case values explicitly.
+
+Fresh confined verification passed **47 discovered tests: 45 passed and two opt-in Docker tests skipped**, plus four tripwires and 29/29 frontmatter checks. The explicit promotion suite passed **18/18 with zero skips**. The explicit worker suite also completed in 91.724 seconds: **24 discovered, 22 passed and two Docker skips**. Existing formal/production vacuity remains unchanged. Historical hosted results above apply to their named earlier revisions; **new hosted CI and actual Docker qualification for these corrections are pending**. Existing runtime restrictions and authority limits remain unchanged.

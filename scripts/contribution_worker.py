@@ -220,6 +220,7 @@ def run(repository, trusted_revision, candidate_revision, timeout=30):
         entries = objects.entries(candidate_revision)
         for name in ("candidate", "trusted"):
             (root / name).mkdir(mode=0o755)
+            (root / name).chmod(0o755)
         for path, oid, size in entries:
             target = root / "candidate" / path
             target.parent.mkdir(parents=True, exist_ok=True)

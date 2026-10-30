@@ -128,11 +128,43 @@ class PromotionTests(unittest.TestCase):
                 self.evaluate(p, o)
 
     def test_latest_review_supersedes_old_approval(self):
-        for state in ("DISMISSED", "COMMENTED", "CHANGES_REQUESTED"):
+        for state in ("DISMISSED", "CHANGES_REQUESTED"):
             p, o = fixture()
             later = dict(o["reviews"][0], id=61, state=state, submitted_at="2026-10-30T11:50:00Z")
             o["reviews"].insert(0, later)  # ordering independent
+            o["reviews_after"] = copy.deepcopy(o["reviews"])
             with self.assertRaises(v.Rejected):
+                self.evaluate(p, o)
+
+    def test_comment_does_not_clear_other_reviewers_changes_requested(self):
+        p, o = fixture()
+        o["reviews"].append(dict(id=61, user=dict(id=41), state="CHANGES_REQUESTED",
+                                 commit_id=HEAD, submitted_at="2026-10-30T11:38:00Z"))
+        o["reviews"].append(dict(id=62, user=dict(id=41), state="COMMENTED",
+                                 commit_id=HEAD, submitted_at="2026-10-30T11:41:00Z"))
+        o["reviews_after"] = copy.deepcopy(o["reviews"])
+        with self.assertRaisesRegex(v.Rejected, "changes requested"):
+            self.evaluate(p, o)
+
+    def test_comment_preserves_approval_without_becoming_a_decision(self):
+        p, o = fixture()
+        o["reviews"].append(dict(o["reviews"][0], id=61, state="COMMENTED",
+                                 submitted_at="2026-10-30T11:41:00Z"))
+        o["reviews_after"] = copy.deepcopy(o["reviews"])
+        result = self.evaluate(p, o)
+        self.assertEqual(result["review_id"], 60)
+        self.assertFalse(result["deployment_authorized"])
+
+    def test_commented_observations_still_require_valid_metadata(self):
+        for field, value in (("commit_id", "invalid"), ("submitted_at", "invalid"),
+                             ("submitted_at", "2026-10-30T12:01:00Z"), ("id", True)):
+            p, o = fixture()
+            comment = dict(o["reviews"][0], id=61, state="COMMENTED",
+                           submitted_at="2026-10-30T11:41:00Z")
+            comment[field] = value
+            o["reviews"].append(comment)
+            o["reviews_after"] = copy.deepcopy(o["reviews"])
+            with self.subTest(field=field, value=value), self.assertRaises((v.Rejected, v.Unavailable)):
                 self.evaluate(p, o)
 
     def test_other_allowed_reviewer_changes_requested_blocks(self):

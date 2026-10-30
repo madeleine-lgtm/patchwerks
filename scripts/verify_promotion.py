@@ -280,7 +280,7 @@ def evaluate(policy, revision, pr_number, run_id, artifact_id, obs, now=None):
         submitted = stamp(field(review, "submitted_at"))
         require(submitted <= now, "review timestamp in future")
         match(SHA, field(review, "commit_id"))
-        if reviewer in p["allowed_reviewer_ids"]:
+        if reviewer in p["allowed_reviewer_ids"] and state in ("APPROVED", "CHANGES_REQUESTED", "DISMISSED"):
             order = (submitted, review_id)
             if reviewer not in latest or order > latest[reviewer][0]:
                 latest[reviewer] = (order, review)
