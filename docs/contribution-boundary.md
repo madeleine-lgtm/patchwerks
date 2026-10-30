@@ -53,7 +53,11 @@ Success reports `eligible_for_executor_review: true` and always `deployment_auth
 
 Local evidence: the confined gate discovered 23 worker tests: **21 passed and two real-Docker tests explicitly skipped**. The full canonical gate after the filesystem-alias fix discovered 43 tests: **41 passed and two real-Docker tests skipped**, against baseline 5. It also passed four tripwires and 29/29 frontmatter checks. The counter includes discovered skipped tests; 43 is not a count of executed passing tests. Existing formal/production vacuity remains unchanged.
 
-Both direct Git-object case/Unicode alias rejection tests passed in that gate. The artifact verifier contains 15 tests, all included in the measured full gate. They use synthetic observations/provider transports and do not establish live GitHub artifact eligibility. **Hosted real-Docker execution and independent acceptance remain Pending.** Local Docker isolation has not been demonstrated by these results.
+Both direct Git-object case/Unicode alias rejection tests passed in that gate. The artifact verifier contains 15 tests, all included in the measured full gate. They use synthetic observations/provider transports and do not establish live GitHub artifact eligibility. Local Docker isolation was not demonstrated by those local results. **Hosted controlled-fixture qualification passed; independent acceptance and production enforcement remain pending.**
+
+Hosted evidence for [PR 10](https://github.com/patchwerks/patchwerks/pull/10) is scoped to head `dd1af648ced324be021a04506beee7fbc4f46402`, synthetic merge checkout `01e9f08427dca2dd24238a159a45b10232dbeaf8`, and accepted base `b99937e5f22ff34455723aaca667b394bd2be86e`. The [boundary qualification job](https://github.com/patchwerks/patchwerks/actions/runs/41041916979/job/124016530598) completed successfully at 2026-10-30T10:36Z on Ubuntu 24.04.5, Python 3.12.11 and Git 2.56.0: **all 23 worker tests passed, including both real-Docker tests, with zero skips; all 15 artifact-verifier tests passed**. This demonstrates the controlled hostile fixtures under that hosted container configuration. Artifact observations remain synthetic and do not demonstrate production artifact acceptance.
+
+The separate [hosted canonical gate](https://github.com/patchwerks/patchwerks/actions/runs/41041916928/job/124016530540) passed with 43 discovered tests: 41 passed and two Docker tests skipped in its default profile, plus four tripwires and 29/29 frontmatter checks. Pinned actions emitted a Node 20-to-24 runtime warning; it did not fail either job. These results establish evidence for the exact revisions above, not unreviewed subsequent changes or production enforcement.
 
 ```sh
 python3 -I -B -m unittest discover -s tests -p 'test_contribution_worker.py' -v
@@ -71,5 +75,7 @@ The execution controls follow the [Docker container run reference](https://docs.
 
 ## Changelog
 
+- 2026-10-30: Recorded successful hosted qualification at PR 10 head `dd1af648ced324be021a04506beee7fbc4f46402`: 23 worker tests including both real-Docker cases and 15 synthetic artifact tests passed; preserved local/default-profile skips and independent/production acceptance limits.
+
 - 2026-10-30: Added portable filesystem-alias rejection and exclusive staging writes, with passing direct Git-object case/Unicode fixtures; clarified trusted local Git metadata prerequisites. The updated confined canonical gate discovered 43 tests: 41 passed and two real-Docker tests skipped.
-- 2026-10-30: Added the bounded worker and advisory artifact qualification contract, mapped acceptance scenarios, and recorded confined local results with real Docker and independent acceptance still pending.
+- 2026-10-30: Added the bounded worker and advisory artifact qualification contract, mapped acceptance scenarios, and recorded confined local results and separately scoped hosted real-Docker qualification; independent acceptance remains pending.
