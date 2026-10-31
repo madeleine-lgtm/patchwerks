@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "document_type": "proposed-permission-plan",
+  "role": "publisher",
+  "permissions": {
+    "contents": "write",
+    "pull_requests": "write",
+    "metadata": "read"
+  },
+  "registration_authorized": false,
+  "installation_authorized": false
+}
