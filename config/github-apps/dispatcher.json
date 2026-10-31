@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "document_type": "proposed-permission-plan",
+  "role": "dispatcher",
+  "permissions": {
+    "organization_projects": "write",
+    "issues": "write",
+    "pull_requests": "read",
+    "metadata": "read"
+  },
+  "registration_authorized": false,
+  "installation_authorized": false
+}
