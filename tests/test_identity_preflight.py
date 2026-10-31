@@ -21,7 +21,7 @@ NOW = dt.datetime(2026, 10, 30, 12, tzinfo=dt.timezone.utc)
 
 def fixture(operation="review_pr"):
     roles = {role: dict(app_id=n, installation_id=n+10, bot_user_id=n+20)
-             for role, n in zip(v.PERMISSIONS, (1, 2, 3))}
+             for role, n in zip(v.PERMISSIONS, (1, 2, 3), strict=True)}
     p = dict(schema_version=1, repository_ids=[100], project_node_ids=["SYNTHETIC_PROJECT"], roles=roles,
              max_evidence_age_seconds=300, required_checks=[dict(name="test", app_id=99)])
     request = dict(operation=operation, repository_id=100, head_sha=HEAD, author_id=50,
@@ -178,11 +178,19 @@ class IdentityTests(unittest.TestCase):
             r["operation"] = operation
             with self.assertRaises(v.Refused):
                 self.runplan(p, r, o)
-        for path in (".github/workflows/test.yml", "policy/trust.json", "AGENTS.md", "../escape", "docs/trust.md"):
-            p, r, o = fixture()
-            r["changed_paths"] = [path]
-            with self.assertRaises(v.Refused):
-                self.runplan(p, r, o)
+        for path in (
+            ".github/workflows/test.yml", "policy/trust.json", "AGENTS.md", "../escape", "docs/trust.md",
+            ".agents/skills/ratchet-check/SKILL.md", "CLAUDE.md", "GEMINI.md", "HERMES.md",
+            ".gitmodules", ".gitattributes", "tests/audit_immutability.sh",
+            ".AGENTS/skills/ratchet-check/SKILL.md", "Claude.Md", "Gemini.Md", "Hermes.Md",
+            ".GitModules", ".GitAttributes", "Tests/audit_immutability.sh",
+            "src/../tests/audit_immutability.sh", "tests\\audit_immutability.sh",
+        ):
+            with self.subTest(path=path):
+                p, r, o = fixture()
+                r["changed_paths"] = [path]
+                with self.assertRaises(v.Refused):
+                    self.runplan(p, r, o)
 
     def test_input_bounds_and_symlinks(self):
         with self.assertRaises(v.Refused):

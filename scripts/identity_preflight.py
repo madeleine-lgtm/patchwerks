@@ -26,8 +26,10 @@ SCOPES = {
     "project_update": {"organization_projects": "write", "metadata": "read"},
 }
 STATUSES = ("Backlog", "Ready", "In progress", "Review", "Blocked")
-PROTECTED = (".git", ".github", ".agentile", "policy", "config", "scripts", "manifests",
-             "agents.md", "docs/trust.md", "docs/orchestration.md", "docs/releases.md",
+PROTECTED = (".git", ".github", ".agentile", ".agents", ".gitmodules", ".gitattributes",
+             "policy", "config", "scripts", "tests", "manifests",
+             "agents.md", "claude.md", "gemini.md", "hermes.md",
+             "docs/trust.md", "docs/orchestration.md", "docs/releases.md",
              "docs/scoped-identities.md", "workspace.lock.json")
 
 
