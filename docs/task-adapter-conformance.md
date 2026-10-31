@@ -15,7 +15,7 @@ crash safety, distributed exclusivity or exactly-once effects. Issue 4 remains o
 
 ## Source and integration gap
 
-The inventory below records the 2026-10-29 inspection scope. Its statement that no native source was identified is **superseded by the 2026-10-30 correction below**; it is retained as historical evidence, not the current source inventory.
+The inventory below records the 2026-10-29 inspection scope. The author subsequently reported identifying local native implementations, summarized below. That update is author-reported, not independently reproduced from this PR; the earlier inventory remains historical context.
 
 The accepted coordinator base is `b99937e5f22ff34455723aaca667b394bd2be86e`;
 GitHub's main revision was read back as the same revision during preparation.
@@ -84,7 +84,9 @@ through its unchanged ratchet command. The trusted baseline remains five tests;
 synthetic vectors are subtests, not inflated independent test counts.
 
 
-## Source inventory correction and bounded native follow-up — 2026-10-30
+## Author-reported source inventory and native follow-up — 2026-10-30
+
+The native implementation, confinement and test results in this section are author-reported, not independently reproduced from this PR. The adapter source and native test output remain outside this public candidate. The Hermes runtime revision below does not identify the adapter source revision or bind the reported output to it.
 
 The actual local `hermes-github-sync` package has now been identified and inspected. It registers a native Hermes CLI extension, uses Hermes's public Kanban JSON CLI, and owns a separate SQLite mapping/observation/operation journal. It defaults to held, unassigned projection tasks; optional telemetry is a separate mode. The earlier inventory's absence of identified source must no longer be interpreted as an absence of a native implementation.
 
@@ -92,7 +94,7 @@ The bounded local follow-up canonicalizes SQLite database/lock identity across s
 
 The state directory and its ancestors must be trusted, without concurrent hostile replacement. Local file locking does not establish distributed serialization. Newly enrolled stores now persist a canonical Project/repository/Issue/board import intent before native creation, reuse the same native idempotency key after lost acknowledgment and changed placement, refresh the held task scope note, and atomically acknowledge its mapping. Lost-ack plus placement-readd recovery passed the native regression. Existing unmarked stores retain mapped tasks but hold new imports before creation until operator inventory and reviewed migration; no live or automatic migration is supplied.
 
-The offline conformance suite above remains synthetic. It is not a direct certification of the native package, and its fixture booleans do not establish authenticated identity or provider receipts. A real owner binding, provider round trips, conflicting-writer qualification and independent acceptance remain required. The separate local `omo-github-sync` implementation now has measured native qualification, recorded below. It uses actual pinned native factories; no native API is invented.
+The offline conformance suite above remains synthetic. It is not a direct certification of the native package, and its fixture booleans do not establish authenticated identity or provider receipts. A real owner binding, provider round trips, conflicting-writer qualification and independent acceptance remain required. The separate local `omo-github-sync` implementation has an author-reported native checkpoint, recorded below; native qualification is not established by this public PR.
 
 See the [PW-0.4 native follow-up plan](../.agentile/sprints/active/2026-10-25-coordination/issue-4-native-plan.md). Issue 4 remains open; no service, GitHub lifecycle mutation or unattended dispatcher is enabled by this evidence.
 
@@ -102,11 +104,23 @@ See the [PW-0.4 native follow-up plan](../.agentile/sprints/active/2026-10-25-co
 
 - 2026-10-30: Isolated Plugin Doctor passed for the final Hermes package. The coordinator canonical gate passed 12 tests, four tripwires and 30/30 frontmatter checks; these coordination checks remain separate from the 69 native-package tests. OmO qualification subsequently passed as recorded below.
 
+- 2026-10-31: Clarified that the native results, including the historical pass statements above, are author-reported, not independently reproduced from this PR. Added private source review and revision-bound evidence requirements; historical coordinator counts are not a fresh rerun or native acceptance.
 
-## OmO native qualification — 2026-10-30
+
+## Author-reported OmO checkpoint — 2026-10-30
+
+The implementation, confinement and test results below are author-reported, not independently reproduced from this PR. The native runtime pin does not identify the unpublished adapter source or bind its test output.
 
 The new local `omo-github-sync` adapter targets official `code-yeongyu/oh-my-openagent` revision `84a4e6cdecfd3f55e30ff551cab1d6ae27ce7cdb`. Its confined suite passed **15 tests with zero skips in 20.317 seconds** using Bun 1.4.4: 14 unit tests and one expanded actual-native test. The native test exercises the real create/get/list/update factories, dependency graphs, replay, graph creation under a new snapshot digest, terminal-task preservation, and recovery after a lost response following an actual create by using native list/get without duplication.
 
 Qualification used a clean environment, denied all network access and restricted writes to isolated scratch space. It supplied no dispatcher, model or session context. Private native stores are isolated per full snapshot digest. Native `pending` is a task state, **not an execution hold**; keeping those stores outside any active dispatcher is an essential boundary, not a property inferred from the status label.
 
-The adapter has no GitHub write path. Its read-only provider fetch remains unqualified against live GitHub. The adapter source payload remains local and is not copied into this public coordination repository. These tests establish the bounded native projection/recovery behavior above; they do not establish authenticated cross-harness handoff, distributed exclusivity, live provider acceptance or independent approval. Issue 4 remains open.
+The author reports no GitHub write path. Read-only provider fetch remains unqualified against live GitHub. The adapter source payload remains local and is not copied into this public coordination repository. The reported tests cover bounded native projection/recovery; this PR does not independently establish that behavior, authenticated cross-harness handoff, distributed exclusivity, live provider acceptance or independent approval. Issue 4 remains open.
+
+## Owner steps before native acceptance
+
+1. Give the independent reviewer owner-approved private access to each adapter's exact source and test harness revision. Keep private code, credentials, host state and raw runtime logs outside this public repository. If source access is unavailable, native acceptance remains blocked.
+2. Provide a review package tying the adapter source revision, harness revision, pinned runtime and dependency lockfile to the exact commands, isolation configuration and corresponding test output, including skips and failures. A runtime pin alone is insufficient. Use the approved private channel for sensitive evidence and publish only approved, sanitized status. Changed candidates need renewed evidence and review.
+3. Obtain independent source review and test reproduction under the existing [trust boundary](trust.md). Acquire inputs through approved access, then execute candidate code only in disposable, credential-free workers without host-home, private-network or device access; keep privileged publishing separate. The author's report is not independent approval.
+4. Qualify actual owner bindings and authenticated provider round trips, including identity and receipt provenance, within a separately authorized test scope. Exercise crash/restart replay and lost acknowledgments across real persistence boundaries, reconciling uncertain effects before retry. Demonstrate conflicting-writer exclusion and stale-worker rejection at the intended operating scope; a local lock is not distributed fencing.
+5. Complete existing scoped-identity, dispatcher and independent acceptance gates before unattended synchronization. Acceptance of the public synthetic preparation does not accept either native adapter. This record grants no new installation, migration, deployment, GitHub lifecycle-write or service authority.
