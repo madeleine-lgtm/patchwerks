@@ -5,7 +5,14 @@ repository="${1:?repository path required}"
 baseline="${2:?trusted baseline SHA required}"
 [[ "$baseline" =~ ^[0-9a-f]{40}$ ]] || exit 2
 
-if ! changes="$(git -C "$repository" diff --name-only --diff-filter=MDRT "$baseline" HEAD -- .agentile/audits/)"; then
+# Inspect actual objects, not a candidate's local refs/replace substitutions.
+# git diff also accepts trees and annotated tags; neither is an exact commit ID.
+if ! object_type="$(git --no-replace-objects -C "$repository" cat-file -t "$baseline" 2>/dev/null)" || [[ "$object_type" != commit ]]; then
+  echo 'ERROR: trusted baseline must identify a commit object.' >&2
+  exit 2
+fi
+
+if ! changes="$(git --no-replace-objects -C "$repository" diff --name-only --diff-filter=MDRT "$baseline" HEAD -- .agentile/audits/)"; then
   echo 'ERROR: audit history could not be verified.' >&2
   exit 2
 fi
