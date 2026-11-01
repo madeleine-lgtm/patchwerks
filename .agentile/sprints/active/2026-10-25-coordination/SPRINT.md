@@ -63,3 +63,26 @@ and executable fixtures. No product runtime or physical acceptance is implied.
 
 - 2026-10-30: Added the bounded PW-0.2 / issue #5 implementation and qualification
   plan; current dispatch and acceptance remain on the canonical GitHub issue.
+- 2026-10-29: PW-0.2 / [issue #5](https://github.com/patchwerks/patchwerks/issues/5)
+  local follow-up adds hostile-input fixtures for the accepted audit helper and
+  a minimal commit-object validation fix. See the [bounded evidence report](../../../../docs/hostile-audit-fixtures.md).
+  Candidate only: upstream publication, independent acceptance and complete
+  contribution/promotion isolation remain pending; no workflow activation occurs.
+- 2026-10-30: PW-0.2 / issue #5 continuation adds rename and symlink regression
+  cases. Accepted-helper comparison reproduced the two object-type failures;
+  candidate verification passed 15 tests. No state-machine or product CLI change
+  is introduced, so TLA+ and Gherkin are not applicable to this build-infrastructure
+  slice. See the same bounded evidence report for worker limits and the current
+  read-only publication blocker. This session holds no live resources; its local
+  continuation is handed off for publication and independent review.
+- 2026-10-30: Further PW-0.2 / issue #5 adversarial work reproduced two local
+  replacement-reference bypasses. Object admission and diff now ignore those
+  replacements; three new regressions bring the canonical gate to 18 tests.
+  The evidence report distinguishes local-metadata control from ordinary PR
+  content and retains the broader CI/promotion acceptance limits.
+
+- 2026-11-01: Integrated accepted main `7c18f297` into the issue #5 candidate.
+  The original `b99937e` starting-point statement above records historical
+  scope; accepted main now includes the audit-helper fixes from PR #9 and scoped
+  identity work from PR #11. Both evidence histories are retained. Fresh
+  exact-head checks and independent review remain required.
